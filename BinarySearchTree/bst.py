@@ -95,6 +95,7 @@ class BST(object):
         return x
 
     def floor(self, k):
+        # Largest key <= to k
         def _floor(x, k):
             if x == None: return None
             if k == x.value: return x
@@ -108,6 +109,7 @@ class BST(object):
         return x.value
 
     def ceiling(self,k):
+        # Smallest key >= k
         def _ceiling(x, k):
             if x == None: return None
             if k == x.value: return x
@@ -121,6 +123,7 @@ class BST(object):
         return x.value
 
     def rank(self,k):
+        # How many keys < k
         def _rank(x, k):
             if x == None : return 0
             if k == x.value: return self.size(x.left)
@@ -129,8 +132,25 @@ class BST(object):
 
         return _rank(self.root, k)
 
-    def delete_min(self,x):
+    def select(self,k):
+        # returns the kth smallest key
+        def _select(x, k):
+            if x is None: return None
+            t = self.size(x)
+            if t > k: return _select(x.left, k)
+            elif t < k: return _select(x.right, k-t-1)
+            else: return x
 
+        _select(self.root, k)
+
+    def height(self):
+        # return the height of the BST (a 1-node tree has height 0)
+        def _height(x):
+            if x is None: return -1
+            return 1 + max(_height(x.left), _height(x.right))
+        return _height(self.root)
+
+    def delete_min(self,x):
         def _delete_min(x):
             if x.left == None: return x.right
             x.left=_delete_min(x.left)
@@ -139,8 +159,16 @@ class BST(object):
 
         _delete_min(x)
 
-    def delete(self,k):
+    def delete_max(self):
+        def _delete_max(x):
+            if x.right == None : return x.left
+            x.right = _delete_max(x.right)
+            x.count = 1 + self.size(x.left) + self.size(x.right)
+            return x
 
+        _delete_max(self.root)
+
+    def delete(self,k):
         def _delete(x,k):
             if x == None: return None
             if k < x.value:
@@ -160,6 +188,23 @@ class BST(object):
 
 
         self.root = _delete(self.root, k)
+
+    def delete_outside_range(self, a, b):
+        # http://www.ideserve.co.in/learn/remove-out-of-range-bst-nodes
+        # time complexity of this algorithm is O(n) with O(n) auxiliary space usage
+        def _delete_outside_range(x , a, b):
+            if x is None: return
+            x.left = _delete_outside_range(x.left , a, b)
+            x.right = _delete_outside_range(x.right , a, b)
+
+            if x.value < a:
+                return x.right
+            if x.value > b:
+                return x.left
+            return x
+
+        self.root = _delete_outside_range(self.root , a, b)
+
 
 
     # def successor(self, node):
@@ -189,6 +234,7 @@ from random import randint
 
 nums = [randint(1, 100) for i in range(7)]
 nums=[8, 10, 9, 3,7,5, 2, 14]
+nums=[8, 5, 11, 2,7,9, 12, 6, 10, 13]
 print(nums)
 for i in nums: bin.insert(i)
 print(bin.root)
@@ -197,9 +243,12 @@ print(bin.root)
 print('Min: ',bin.minimum(bin.root))
 print('Max: ',bin.maximum(bin.root))
 print('Floor: ',bin.floor(6))
-# print('Ceiling: ',bin.ceiling(6))
+print('Ceiling: ',bin.ceiling(6))
+print('Rank: ',bin.rank(2))
+print('Height: ',bin.height())
+bin.delete_outside_range(3, 9)
 # print('Successor: ',bin.successor(3))
-# print('Rank: ',bin.rank(50))
+
 #
 # print('DeleteMin: ',bin.delete_min())
 # print('Traversal:' , bin.traversal('in'))
@@ -212,10 +261,10 @@ print('Floor: ',bin.floor(6))
 # bin.insert('A')
 # bin.insert('C')
 
-# print (bin.root)
-# print (bin.root.left)
-# print (bin.root.right)
-# print (bin.root.left.left)
-# print (bin.root.left.right)
-# print (bin.root.right.left)
-# print (bin.root.right.right)
+print (bin.root)
+print (bin.root.left)
+print (bin.root.right)
+print (bin.root.left.left)
+print (bin.root.left.right)
+print (bin.root.right.left)
+print (bin.root.right.right)
