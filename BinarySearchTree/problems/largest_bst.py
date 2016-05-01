@@ -60,7 +60,6 @@ def find_size_of_largest_bst(x, min_v, max_v, is_bst, max_bst_size):
 
 
 
-
 root = Node(10)
 n1 = Node(6)
 n2 = Node(12)

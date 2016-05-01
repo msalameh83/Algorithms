@@ -96,6 +96,8 @@ class BST(object):
 
     def floor(self, k):
         # Largest key <= to k
+        # http://www.ideserve.co.in/learn/floor-ceiling-using-binary-search-tree
+        #  O(logn) time with extra space of order O(1)
         def _floor(x, k):
             if x == None: return None
             if k == x.value: return x
@@ -205,27 +207,14 @@ class BST(object):
 
         self.root = _delete_outside_range(self.root , a, b)
 
+    def is_sibling(self,a, b):
+        def _is_siblings(x, a, b):
+            if x is None: return False
+            return (x.left is a or x.right is b) or (x.left is b or x.right is a) or  _is_siblings(x.left, a, b) or _is_siblings(x.right, a, b)
+
+        return _is_siblings(self.root, a, b)
 
 
-    # def successor(self, node):
-    #     parent = None
-    #     if node.right != None:
-    #         return self.minimum(node.right)
-    #     parent = node.p
-    #     while parent != None and node == parent.right:
-    #         node = parent
-    #         parent = parent.p
-    #     return parent
-
-    # def predecessor(self, node):
-    #     parent = None
-    #     if node.left != None:
-    #         return self.maximum(node.left)
-    #     parent = node.p
-    #     while parent != None and node == parent.left:
-    #         node = parent
-    #         parent = parent.p
-    #     return parent
 
 
 bin = BST()
@@ -268,3 +257,6 @@ print (bin.root.left.left)
 print (bin.root.left.right)
 print (bin.root.right.left)
 print (bin.root.right.right)
+
+s =bin.is_sibling(bin.root.left.left, bin.root.left)
+print (s)
