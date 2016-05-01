@@ -36,6 +36,38 @@ If there is no such j then MSH(i) = height(i)
 http://www.geeksforgeeks.org/dynamic-programming-set-21-box-stacking-problem/
 
 
+boxes = [(1, 2, 4), (3, 2, 5)]
+permutations = [[(1, 2, 4), (1, 4, 2), (2, 1, 4), (2, 4, 1), (4, 1, 2), (4, 2, 1)],
+                [(3, 2, 5), (3, 5, 2), (2, 3, 5), (2, 5, 3), (5, 3, 2), (5, 2, 3)]]
+
+filter l > w :
+                [(2, 1, 4), (4, 1, 2), (4, 2, 1), (3, 2, 5), (5, 3, 2), (5, 2, 3)]
+
+sort permutations on l x w :
+                [(5, 3, 2), (5, 2, 3), (4, 2, 1), (3, 2, 5), (4, 1, 2), (2, 1, 4)]
+
+LIS problem based on height
+max_height = [2, 3, 1, 5, 2, 4]
+result =     [0, 1, 2, 3, 4, 5]
+
+i j  max_height         result
+    [2, 3, 1, 5, 2, 4] [0, 1, 2, 3, 4, 5]
+1 0 [2, 3, 1, 5, 2, 4] [0, 1, 2, 3, 4, 5]
+2 0 [2, 3, 3, 5, 2, 4] [0, 1, 0, 3, 4, 5]
+2 1 [2, 3, 3, 5, 2, 4] [0, 1, 0, 3, 4, 5]
+3 0 [2, 3, 3, 7, 2, 4] [0, 1, 0, 0, 4, 5]
+3 1 [2, 3, 3, 7, 2, 4] [0, 1, 0, 0, 4, 5]
+3 2 [2, 3, 3, 7, 2, 4] [0, 1, 0, 0, 4, 5]
+4 0 [2, 3, 3, 7, 4, 4] [0, 1, 0, 0, 0, 5]
+4 1 [2, 3, 3, 7, 5, 4] [0, 1, 0, 0, 1, 5]
+4 2 [2, 3, 3, 7, 5, 4] [0, 1, 0, 0, 1, 5]
+4 3 [2, 3, 3, 7, 5, 4] [0, 1, 0, 0, 1, 5]
+5 0 [2, 3, 3, 7, 5, 6] [0, 1, 0, 0, 1, 0]
+5 1 [2, 3, 3, 7, 5, 7] [0, 1, 0, 0, 1, 1]
+5 2 [2, 3, 3, 7, 5, 7] [0, 1, 0, 0, 1, 2]
+5 3 [2, 3, 3, 7, 5, 11] [0, 1, 0, 0, 1, 3]
+5 4 [2, 3, 3, 7, 5, 11] [0, 1, 0, 0, 1, 3]
+
 """
 
 from itertools import permutations
@@ -55,7 +87,6 @@ def box_stacking(boxes):
 
     max_height = [box[2] for box in boxes]
     result = list(range(len(boxes)))
-
     for i in range(1, len(max_height)):
         for j in range(i):
             # can box[i] go on the top of box[j] such that length[i] < length[j] and width[i] < width[j]
