@@ -104,12 +104,77 @@ class ConnectedComponents():
                 self.dfs(graph,w)
 
 
+class M_Color():
+    """
+    http://www.geeksforgeeks.org/backttracking-set-5-m-coloring-problem/
+    uses backtracking
+    Given an undirected graph and a number m, determine if the graph
+    can be colored with at most m colors such that no two adjacent
+    vertices of the graph are colored with same color. Here coloring
+    of a graph means assignment of colors to all vertices.
+
+    """
+    def __init__(self, G, m):
+        self.G = G
+        self.V = len(self.G)
+        self.color = [0] * self.V
+        self.m = m
+        self.coloring(m, 0)
+
+    def is_safe(self, v, c):
+        # check if the current color assignment is safe for vertex v
+        for i in range(self.V):
+            if self.G[v][i] == 1 and c == self.color[i]:
+                return False
+        return True
+
+    def coloring(self, m, v):
+        # base case: If all vertices are assigned a color then return true
+        if v == self.V:
+            return True
+
+        # Consider this vertex v and try different colors
+        for c in range(1, self.m + 1):
+            # Check if assignment of color c to v is fine
+            if self.is_safe(v, c):
+                self.color[v] = c
+
+                # recur to assign colors to rest of the vertices
+                if self.coloring(self.m, v + 1):
+                    return True
+
+                # If assigning color c doesn't lead to a solution then remove it
+                self.color[v] = 0
+
+        # If no color can be assigned to this vertex then return false
+        return False
 
 
-gtup=[(0,5),(4,3),(0,1),(9,12),(6,4),(5,4),(0,2),(11,12),(9,10),(0,6),(7,8),(9,11),(5,3)]
-# gtup=[(0,5), (2,4), (2,3), (1,2), (0,1), (3,4), (3,5), (0,2)]
-myGraph=UG(gtup)
-print (myGraph.graph)
+
+graph = [[0, 1, 1, 1],
+         [1, 0, 1, 0],
+         [1, 1, 0, 1],
+         [1, 0, 1, 0]]
+# (3)---(2)
+#  |   / |
+#  |  /  |
+#  | /   |
+# (0)---(1)
+
+m = 3 # Number of colors
+clr = M_Color(graph, m)
+print (clr.color) # [1, 2, 3, 2]
+
+
+
+
+
+
+
+# gtup=[(0,5),(4,3),(0,1),(9,12),(6,4),(5,4),(0,2),(11,12),(9,10),(0,6),(7,8),(9,11),(5,3)]
+# # gtup=[(0,5), (2,4), (2,3), (1,2), (0,1), (3,4), (3,5), (0,2)]
+# myGraph=UG(gtup)
+# print (myGraph.graph)
 
 
 # dfp=DepthFirstPaths(myGraph,0)
@@ -121,8 +186,8 @@ print (myGraph.graph)
 # print (bfp.edgeTo)
 
 
-cc=ConnectedComponents(myGraph)
-print (cc.cc_id)
+# cc=ConnectedComponents(myGraph)
+# print (cc.cc_id)
 
 
 

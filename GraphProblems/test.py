@@ -61,21 +61,22 @@ Relax edge e = v -> w.
 import heapq
 class DikstraSP():
     def __init__(self, ewg, s):
+        print(ewg.vertices)
         self.edgeTo=[None] * len(ewg.vertices) # list of DirectedEdges
         self.distTo=[sys.maxsize] * len(ewg.vertices)  # list of weights
         self.pq = [] #IndexMinPQ()
         self.ewg=ewg
         self.dikstra(s)
-        # print(self.edgeTo)
-        # print(self.distTo)
-        paths = zip(list(range(len(ewg.vertices))), self.edgeTo, self.distTo)
-        for i in paths:print (i)
+        print(self.edgeTo)
+        print(self.distTo)
 
     def dikstra(self, s):
         self.distTo[s] = 0.0
         heapq.heappush(self.pq,[0.0, s] )
+        # self.pq.insert([0.0, s])
         while len(self.pq) > 0 :
             dist, v = heapq.heappop(self.pq)
+            print(v)
             for e in self.ewg.adjacent(v):
                 self.relax(e)
 
